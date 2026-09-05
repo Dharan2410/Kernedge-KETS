@@ -1,10 +1,13 @@
 import WelcomeHero from "./components/WelcomeHero";
+import HomeContent from "./components/HomeContent";
+import ScrollDots from "./components/ScrollDots";
 
 function App() {
   return (
     <>
       <WelcomeHero />
-      {/* rest of your one-page site goes here */}
+      <HomeContent />
+      <ScrollDots />
     </>
   );
 }

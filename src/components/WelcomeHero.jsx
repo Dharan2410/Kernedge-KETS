@@ -16,7 +16,7 @@ const HOLD_MS = 2200; // how long the full welcome screen stays before shrinking
 const SHRINK_MS = 900; // shrink animation duration
 const NAV_HEIGHT = 72; // px, final collapsed height
 
-const NAV_LINKS = ["Home", "About", "Events", "Team", "Contact"];
+const NAV_LINKS = [];
 
 export default function WelcomeHero() {
   const [phase, setPhase] = useState("intro"); // intro -> shrinking -> nav
