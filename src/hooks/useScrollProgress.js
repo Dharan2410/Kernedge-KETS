@@ -1,63 +1,62 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Tracks scroll progress (0 → 1) across the pinned height of a section.
+ * Tracks scroll progress (0 -> 1) across the pinned height of a section.
  *
- * Usage: give the returned `ref` to a section that is TALLER than the
- * viewport (e.g. height: 260vh) and contains a `sticky top-0 h-screen`
- * inner wrapper. As the user scrolls through that extra height, progress
- * goes from 0 (section just reached the top) to 1 (section about to
- * release the pin).
+ * Give the returned `ref` to a section that is TALLER than the viewport
+ * (e.g. height: 300vh) and contains a `sticky top-0 h-screen` inner
+ * wrapper. As the user scrolls through that extra height, progress goes
+ * from 0 (section just reached the top) to 1 (about to release the pin).
  *
- * `reducedMotion` mirrors the user's OS-level motion preference so
- * callers can render a static fallback instead of animating.
+ * `reducedMotion` is always false — animation runs the same way for every
+ * visitor/browser, regardless of OS-level motion preferences.
+ *
+ * `holdZones`: optional [start, end] progress ranges (0-1) where the
+ * displayed progress freezes for `holdMs` once entered, so a fully
+ * revealed moment survives a moment of scrolling instead of flashing by.
+ * Only forward progress is held; scrolling back out is immediate.
  */
-// Manual escape hatch: append ?motion=on or ?motion=off to the URL to
-// force the animated/static path regardless of the OS-level "reduce
-// motion" setting. Handy for previewing the scroll animation on a
-// machine (or screen recorder) that has that accessibility setting on,
-// without having to change system settings. Leave the param off and
-// the site behaves exactly as before, honoring the real user preference.
-function getMotionOverride() {
-  if (typeof window === "undefined") return null;
-  const v = new URLSearchParams(window.location.search).get("motion");
-  if (v === "on") return false; // force reducedMotion = false
-  if (v === "off") return true; // force reducedMotion = true
-  return null;
-}
-
-export default function useScrollProgress() {
+export default function useScrollProgress({ holdZones = [], holdMs = 900 } = {}) {
   const ref = useRef(null);
   const [progress, setProgress] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(() => {
-    const override = getMotionOverride();
-    if (override !== null) return override;
-    return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  });
+  // Always animated — not gated behind the OS-level `prefers-reduced-motion`
+  // preference, so behavior is identical for every visitor/browser.
+  const [reducedMotion] = useState(false);
 
-  useEffect(() => {
-    if (getMotionOverride() !== null) {
-      if (import.meta.env?.DEV) {
-        console.info(
-          `[useScrollProgress] ?motion=${new URLSearchParams(window.location.search).get("motion")} override active — ignoring the OS "reduce motion" setting.`
-        );
-      }
-      return; // override wins; don't let the OS setting change it
-    }
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = (e) => setReducedMotion(e.matches);
-    mq.addEventListener("change", onChange);
-    if (import.meta.env?.DEV && mq.matches) {
-      console.info(
-        '[useScrollProgress] System "reduce motion" is ON, so the static fallback is rendering instead of the scroll animation. Add ?motion=on to the URL to preview the animated version.'
-      );
-    }
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
+  const holdRef = useRef({ zoneIndex: -1, startTime: 0, frozenAt: 0 });
 
+  const holdZonesKey = JSON.stringify(holdZones);
   useEffect(() => {
     if (reducedMotion) return;
     let ticking = false;
+    let timeoutId = null;
+
+    const resolveProgress = (rawP) => {
+      const hold = holdRef.current;
+      const now = performance.now();
+      const zoneIdx = holdZones.findIndex(([s, e]) => rawP >= s && rawP < e);
+
+      if (zoneIdx === -1) {
+        hold.zoneIndex = -1;
+        return rawP;
+      }
+      if (hold.zoneIndex !== zoneIdx) {
+        hold.zoneIndex = zoneIdx;
+        hold.startTime = now;
+        hold.frozenAt = Math.max(rawP, holdZones[zoneIdx][0]);
+      }
+      const elapsed = now - hold.startTime;
+      if (elapsed < holdMs) {
+        if (!timeoutId) {
+          timeoutId = window.setTimeout(() => {
+            timeoutId = null;
+            handleScroll();
+          }, holdMs - elapsed + 16);
+        }
+        return hold.frozenAt;
+      }
+      return rawP;
+    };
 
     const handleScroll = () => {
       if (ticking) return;
@@ -67,8 +66,8 @@ export default function useScrollProgress() {
           const rect = ref.current.getBoundingClientRect();
           const total = rect.height - window.innerHeight;
           const scrolled = -rect.top;
-          const p = total > 0 ? Math.min(Math.max(scrolled / total, 0), 1) : 0;
-          setProgress(p);
+          const rawP = total > 0 ? Math.min(Math.max(scrolled / total, 0), 1) : 0;
+          setProgress(resolveProgress(rawP));
         }
         ticking = false;
       });
@@ -80,8 +79,9 @@ export default function useScrollProgress() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
+      if (timeoutId) window.clearTimeout(timeoutId);
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, holdMs, holdZonesKey]);
 
   return { ref, progress, reducedMotion };
 }

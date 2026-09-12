@@ -1,15 +1,131 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Outfit:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: #f4f4f7;
-  color: #0a0a0a;
+  background-color: #050505;
+  color: #F7F6F2;
   font-family: 'Outfit', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #F2B705;
+  color: #050505;
+}
+
+/* thin custom scrollbar, kept quiet */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #2a2a26; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #F2B705; }
+
+/* ---------- Corner-bracket motif (viewfinder / PCB tooling marks) ---------- */
+.brackets {
+  position: relative;
+}
+.brackets::before,
+.brackets::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: currentColor;
+  opacity: 0.8;
+}
+.brackets::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+.brackets::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+/* ---------- Reveal-on-scroll (generic, used by simpler sections) ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+
+
+/* Bigger travel-distance reveal used by the Problem Domains stack —
+   cards genuinely arrive from below the viewport rather than nudging
+   up a few pixels. */
+.reveal-card {
+  opacity: 0;
+  transform: translateY(55vh) scale(0.96);
+  transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal-card.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+
+/* ---------- Blueprint grid backdrop ---------- */
+.grid-backdrop {
+  background-image:
+    linear-gradient(rgba(247,246,242,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247,246,242,0.05) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+.grid-backdrop-light {
+  background-image:
+    linear-gradient(rgba(5,5,5,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(5,5,5,0.06) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+.text-gold-gradient {
+  background: linear-gradient(100deg, #FFE28A 0%, #F2B705 45%, #C98F00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.font-display { font-family: 'Space Grotesk', sans-serif; }
+.font-mono-tag { font-family: 'JetBrains Mono', monospace; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 32s linear infinite;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+@keyframes spinSlow {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
 }

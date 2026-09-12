@@ -1,26 +1,32 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import kernedgeLogo from "../assets/kernedge-logo.jpg";
 
 /**
- * KETS'26 — Welcome Hero
- * Full-viewport animated welcome screen with a bouncing toy mascot.
- * After a short beat, it shrinks upward (bottom edge rising to meet the top)
- * and settles into the site's fixed navbar.
- *
- * Usage: <WelcomeHero /> — mount it once at the top of your single-page app.
- * Everything else on the page should render below/behind it; it is
- * position:fixed so it will sit on top during the intro, then get out
- * of the way (as a slim navbar) once it shrinks.
+ * KETS '26 — Welcome intro.
+ * A full-viewport, deliberately vibrant title card plays once, then the
+ * screen's bottom edge rises to meet the top and it settles into the
+ * site's slim black-and-gold navbar. Everything else on the page sits
+ * below it in normal flow (a spacer keeps content clear of the fixed bar).
  */
 
-const HOLD_MS = 2200; // how long the full welcome screen stays before shrinking
-const SHRINK_MS = 900; // shrink animation duration
-const NAV_HEIGHT = 72; // px, final collapsed height
+const HOLD_MS = 2600;
+const SHRINK_MS = 950;
+const NAV_HEIGHT = 76;
 
-const NAV_LINKS = [];
+const NAV_LINKS = [
+  { label: "About", href: "#about" },
+  { label: "Vision", href: "#vision" },
+  { label: "Prize", href: "#prize" },
+  { label: "Organizers", href: "#organizers" },
+  { label: "Team", href: "#team" },
+  { label: "Domains", href: "#domains" },
+  { label: "Apply", href: "#apply" },
+];
 
 export default function WelcomeHero() {
   const [phase, setPhase] = useState("intro"); // intro -> shrinking -> nav
-  const containerRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const t1 = setTimeout(() => setPhase("shrinking"), HOLD_MS);
@@ -33,60 +39,60 @@ export default function WelcomeHero() {
     return () => clearTimeout(t2);
   }, [phase]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const isIntro = phase === "intro";
   const isShrinking = phase === "shrinking";
   const isNav = phase === "nav";
 
   return (
     <>
-      {/* Fonts + keyframes */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Outfit:wght@400;500&display=swap');
-
-        @keyframes floatBob {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-14px); }
+        @keyframes kets-drift {
+          0% { transform: translate(0,0) scale(1); }
+          50% { transform: translate(30px,-40px) scale(1.12); }
+          100% { transform: translate(0,0) scale(1); }
         }
-        @keyframes waveArm {
-          0%, 100% { transform: rotate(0deg); }
-          25% { transform: rotate(-22deg); }
-          50% { transform: rotate(0deg); }
-          75% { transform: rotate(-14deg); }
+        @keyframes kets-letterIn {
+          from { opacity: 0; transform: translateY(40px) rotateX(40deg); }
+          to { opacity: 1; transform: translateY(0) rotateX(0deg); }
         }
-        @keyframes blinkEyes {
-          0%, 92%, 100% { transform: scaleY(1); }
-          96% { transform: scaleY(0.1); }
-        }
-        @keyframes antennaGlow {
-          0%, 100% { opacity: 0.55; filter: blur(2px); }
-          50% { opacity: 1; filter: blur(0.5px); }
-        }
-        @keyframes titleIn {
-          from { opacity: 0; transform: translateY(18px); letter-spacing: 0.02em; }
-          to { opacity: 1; transform: translateY(0); letter-spacing: normal; }
-        }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(10px); }
+        @keyframes kets-tagIn {
+          from { opacity: 0; transform: translateY(14px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes drift {
-          0% { transform: translate(0,0) scale(1); }
-          50% { transform: translate(20px,-30px) scale(1.08); }
-          100% { transform: translate(0,0) scale(1); }
+        @keyframes kets-sweep {
+          from { transform: translateX(-120%) skewX(-12deg); }
+          to { transform: translateX(220%) skewX(-12deg); }
+        }
+        @keyframes kets-spark {
+          0%, 100% { opacity: 0.25; }
+          50% { opacity: 1; }
+        }
+        .kets-word span {
+          display: inline-block;
+          animation: kets-letterIn 0.7s cubic-bezier(0.22,1,0.36,1) both;
         }
       `}</style>
 
       <div
-        ref={containerRef}
         className="fixed top-0 left-0 w-full overflow-hidden z-50 flex flex-col"
         style={{
-          height: isIntro ? "100vh" : isShrinking ? `${NAV_HEIGHT}px` : `${NAV_HEIGHT}px`,
-          transition: `height ${SHRINK_MS}ms cubic-bezier(0.65, 0, 0.35, 1)`,
-          background: "linear-gradient(160deg, #0B0B2E 0%, #1B0F3D 45%, #2A0944 100%)",
+          height: isIntro ? "100vh" : `${NAV_HEIGHT}px`,
+          transition: `height ${SHRINK_MS}ms cubic-bezier(0.65,0,0.35,1)`,
+          background: isNav
+            ? "rgba(5,5,5,0.92)"
+            : "radial-gradient(120% 140% at 20% 0%, #3a0d63 0%, #14041f 42%, #050505 78%)",
+          backdropFilter: isNav ? "blur(10px)" : "none",
+          borderBottom: isNav ? (scrolled ? "1px solid rgba(242,183,5,0.18)" : "1px solid rgba(255,255,255,0.06)") : "none",
           fontFamily: "'Outfit', sans-serif",
         }}
       >
-        {/* ambient glow blobs — hidden once collapsed to nav */}
+        {/* ---- Vibrant ambient glow (intro only) ---- */}
         {!isNav && (
           <div
             className="absolute inset-0 pointer-events-none"
@@ -95,160 +101,186 @@ export default function WelcomeHero() {
             <div
               className="absolute rounded-full"
               style={{
-                width: 420,
-                height: 420,
-                left: "8%",
-                top: "18%",
-                background: "radial-gradient(circle, rgba(0,229,255,0.28) 0%, rgba(0,229,255,0) 70%)",
-                animation: "drift 9s ease-in-out infinite",
+                width: 480, height: 480, left: "6%", top: "12%",
+                background: "radial-gradient(circle, rgba(242,183,5,0.35) 0%, rgba(242,183,5,0) 70%)",
+                animation: "kets-drift 8s ease-in-out infinite",
               }}
             />
             <div
               className="absolute rounded-full"
               style={{
-                width: 460,
-                height: 460,
-                right: "6%",
-                bottom: "10%",
-                background: "radial-gradient(circle, rgba(255,62,165,0.25) 0%, rgba(255,62,165,0) 70%)",
-                animation: "drift 11s ease-in-out infinite reverse",
+                width: 520, height: 520, right: "4%", bottom: "6%",
+                background: "radial-gradient(circle, rgba(217,45,120,0.32) 0%, rgba(217,45,120,0) 70%)",
+                animation: "kets-drift 10s ease-in-out infinite reverse",
               }}
             />
+            <div
+              className="absolute rounded-full"
+              style={{
+                width: 360, height: 360, left: "42%", top: "50%",
+                background: "radial-gradient(circle, rgba(64,150,255,0.22) 0%, rgba(64,150,255,0) 70%)",
+                animation: "kets-drift 12s ease-in-out infinite",
+              }}
+            />
+            {/* diagonal light sweep */}
+            <div
+              className="absolute top-0 h-full"
+              style={{
+                width: "30%",
+                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)",
+                animation: "kets-sweep 4.5s ease-in-out infinite",
+              }}
+            />
+            {/* scattered sparks */}
+            {[...Array(14)].map((_, i) => (
+              <span
+                key={i}
+                className="absolute rounded-full"
+                style={{
+                  width: 3, height: 3,
+                  left: `${(i * 137) % 100}%`,
+                  top: `${(i * 71) % 100}%`,
+                  background: i % 3 === 0 ? "#F2B705" : "#ffffff",
+                  animation: `kets-spark ${2 + (i % 4)}s ease-in-out infinite`,
+                  animationDelay: `${i * 0.2}s`,
+                }}
+              />
+            ))}
           </div>
         )}
 
-        {/* ---- INTRO / SHRINKING CONTENT ---- */}
+        {/* ---- INTRO / SHRINKING content ---- */}
         {!isNav && (
           <div
-            className="flex-1 flex flex-col items-center justify-center px-6"
+            className="flex-1 flex flex-col items-center justify-center px-6 text-center"
             style={{
               opacity: isShrinking ? 0 : 1,
-              transform: isShrinking ? "scale(0.92) translateY(10px)" : "scale(1)",
-              transition: `opacity ${SHRINK_MS * 0.55}ms ease, transform ${SHRINK_MS * 0.55}ms ease`,
+              transform: isShrinking ? "scale(0.9) translateY(8px)" : "scale(1)",
+              transition: `opacity ${SHRINK_MS * 0.5}ms ease, transform ${SHRINK_MS * 0.5}ms ease`,
             }}
           >
-            {/* --- Toy mascot (SVG) --- */}
-            <div style={{ animation: "floatBob 3.2s ease-in-out infinite" }}>
-              <svg width="150" height="170" viewBox="0 0 150 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* antenna */}
-                <line x1="75" y1="10" x2="75" y2="34" stroke="#FFC93C" strokeWidth="4" strokeLinecap="round" />
-                <circle cx="75" cy="8" r="8" fill="#FFC93C" style={{ animation: "antennaGlow 1.8s ease-in-out infinite", transformOrigin: "75px 8px" }} />
-
-                {/* head */}
-                <rect x="30" y="34" width="90" height="70" rx="26" fill="#FF3EA5" />
-                <rect x="30" y="34" width="90" height="70" rx="26" fill="url(#headShine)" opacity="0.35" />
-
-                {/* eyes */}
-                <g style={{ animation: "blinkEyes 4.5s ease-in-out infinite", transformOrigin: "center" }}>
-                  <circle cx="58" cy="66" r="9" fill="#0B0B2E" />
-                  <circle cx="92" cy="66" r="9" fill="#0B0B2E" />
-                  <circle cx="61" cy="63" r="3" fill="#FFFFFF" />
-                  <circle cx="95" cy="63" r="3" fill="#FFFFFF" />
-                </g>
-
-                {/* smile */}
-                <path d="M58 84 Q75 96 92 84" stroke="#0B0B2E" strokeWidth="4" strokeLinecap="round" fill="none" />
-
-                {/* cheeks */}
-                <circle cx="44" cy="80" r="5" fill="#FFC93C" opacity="0.55" />
-                <circle cx="106" cy="80" r="5" fill="#FFC93C" opacity="0.55" />
-
-                {/* body */}
-                <rect x="42" y="104" width="66" height="52" rx="18" fill="#00E5FF" />
-                <circle cx="75" cy="128" r="10" fill="#0B0B2E" opacity="0.85" />
-                <circle cx="75" cy="128" r="4" fill="#FFC93C" />
-
-                {/* left arm (static) */}
-                <rect x="20" y="112" width="20" height="12" rx="6" fill="#FF3EA5" />
-
-                {/* right arm (waving) */}
-                <g style={{ animation: "waveArm 1.6s ease-in-out infinite", transformOrigin: "112px 116px" }}>
-                  <rect x="110" y="108" width="20" height="12" rx="6" fill="#FF3EA5" />
-                </g>
-
-                {/* legs */}
-                <rect x="52" y="152" width="14" height="16" rx="6" fill="#2A0944" />
-                <rect x="84" y="152" width="14" height="16" rx="6" fill="#2A0944" />
-
-                <defs>
-                  <linearGradient id="headShine" x1="30" y1="34" x2="120" y2="104" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#FFFFFF" />
-                    <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-
-            {/* --- Headline --- */}
-            <h1
-              className="mt-6 text-center font-bold"
-              style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: "clamp(2.2rem, 6vw, 4.2rem)",
-                background: "linear-gradient(90deg, #00E5FF 0%, #FF3EA5 55%, #FFC93C 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                animation: "titleIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both",
-                lineHeight: 1.1,
-              }}
+            <p
+              className="font-mono-tag uppercase tracking-[0.3em] text-xs md:text-sm mb-5"
+              style={{ color: "#FFE28A", animation: "kets-tagIn 0.7s ease 0.15s both" }}
             >
-              Welcome to KETS'26
+              KernEdge Technology &amp; Engineering Summit
+            </p>
+
+            <h1
+              className="kets-word font-display font-bold leading-none"
+              style={{ fontSize: "clamp(3rem, 12vw, 8rem)" }}
+            >
+              {"WELCOME TO".split("").map((ch, i) => (
+                <span key={`a${i}`} style={{ animationDelay: `${0.05 * i}s`, color: "#F7F6F2" }}>
+                  {ch === " " ? "\u00A0" : ch}
+                </span>
+              ))}
+              <br />
+              {"KETS '26".split("").map((ch, i) => (
+                <span
+                  key={`b${i}`}
+                  style={{
+                    animationDelay: `${0.05 * (10 + i)}s`,
+                    background: "linear-gradient(100deg, #FFE28A 0%, #F2B705 45%, #C98F00 100%)",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  {ch === " " ? "\u00A0" : ch}
+                </span>
+              ))}
             </h1>
+
+            <p
+              className="mt-6 max-w-xl text-sm md:text-base"
+              style={{ color: "#C9C4D6", animation: "kets-tagIn 0.8s ease 1.1s both" }}
+            >
+              Where technology meets talent — a Kernedge &amp; Startup Community Coimbatore initiative.
+            </p>
           </div>
         )}
 
-        {/* ---- NAVBAR CONTENT (final settled state) ---- */}
+        {/* ---- NAVBAR (settled state) ---- */}
         <div
-          className="w-full flex items-center justify-between px-6 md:px-10"
+          className="w-full flex items-center justify-between px-5 md:px-10 max-w-7xl mx-auto"
           style={{
             height: NAV_HEIGHT,
             opacity: isNav ? 1 : 0,
-            transition: `opacity 350ms ease ${isNav ? "150ms" : "0ms"}`,
-            borderBottom: isNav ? "1px solid rgba(255,255,255,0.08)" : "none",
+            transition: `opacity 400ms ease ${isNav ? "150ms" : "0ms"}`,
           }}
         >
-          <span
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 700,
-              fontSize: "1.35rem",
-              background: "linear-gradient(90deg, #00E5FF, #FF3EA5)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            KETS'26
-          </span>
+          <a href="#top" className="flex items-center gap-3 shrink-0">
+            <img src={kernedgeLogo} alt="Kernedge" className="h-6 md:h-7 w-auto rounded-sm bg-white p-1" />
+            <span className="font-display font-bold text-lg md:text-xl tracking-tight text-paper">
+              KETS<span className="text-gold">'26</span>
+            </span>
+          </a>
 
-          <nav className="hidden sm:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-7">
             {NAV_LINKS.map((link) => (
               <a
-                key={link}
-                href={`#${link.toLowerCase()}`}
-                className="transition-colors"
-                style={{ color: "#C9C4E8", fontSize: "0.95rem", fontWeight: 500 }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#00E5FF")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#C9C4E8")}
+                key={link.label}
+                href={link.href}
+                className="relative text-sm text-paper/75 hover:text-gold transition-colors group"
               >
-                {link}
+                {link.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
+            <a
+              href="#apply"
+              className="ml-2 px-4 py-2 rounded-full bg-gold text-ink text-sm font-semibold hover:bg-gold-pale transition-colors"
+            >
+              Register
+            </a>
           </nav>
 
           <button
-            className="sm:hidden"
-            aria-label="Open menu"
-            style={{ color: "#00E5FF", fontSize: "1.5rem", background: "none", border: "none" }}
+            className="lg:hidden text-gold text-2xl leading-none w-9 h-9 flex items-center justify-center"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
           >
-            ☰
+            {menuOpen ? "✕" : "☰"}
           </button>
         </div>
+
+        {/* mobile menu panel */}
+        {isNav && (
+          <div
+            className="lg:hidden overflow-hidden transition-all duration-300 ease-out"
+            style={{
+              maxHeight: menuOpen ? 420 : 0,
+              background: "#0a0a0a",
+              borderTop: menuOpen ? "1px solid rgba(255,255,255,0.08)" : "none",
+            }}
+          >
+            <nav className="flex flex-col px-6 py-4 gap-4">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-paper/80 hover:text-gold text-base"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
+              <a
+                href="#apply"
+                className="mt-1 px-4 py-2 rounded-full bg-gold text-ink text-sm font-semibold text-center"
+                onClick={() => setMenuOpen(false)}
+              >
+                Register
+              </a>
+            </nav>
+          </div>
+        )}
       </div>
 
-      {/* Spacer so page content isn't hidden under the fixed navbar once collapsed */}
-      <div style={{ height: NAV_HEIGHT }} />
+      {/* spacer so content clears the fixed navbar once collapsed */}
+      <div id="top" style={{ height: NAV_HEIGHT }} />
     </>
   );
 }
