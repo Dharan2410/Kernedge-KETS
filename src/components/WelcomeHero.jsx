@@ -208,34 +208,6 @@ export default function WelcomeHero() {
               KETS<span className="text-gold">'26</span>
             </span>
           </a>
-
-          <nav className="hidden lg:flex items-center gap-7">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="relative text-sm text-paper/75 hover:text-gold transition-colors group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
-            <a
-              href="#apply"
-              className="ml-2 px-4 py-2 rounded-full bg-gold text-ink text-sm font-semibold hover:bg-gold-pale transition-colors"
-            >
-              Register
-            </a>
-          </nav>
-
-          <button
-            className="lg:hidden text-gold text-2xl leading-none w-9 h-9 flex items-center justify-center"
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            {menuOpen ? "✕" : "☰"}
-          </button>
         </div>
 
         {/* mobile menu panel */}
