@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import kernedgeLogo from "../assets/kernedge-logo.jpg";
+const kernedgeLogo = "/kernedge-logo.jpg";
 
 const HOLD_MS = 2600;
 const SHRINK_MS = 950;

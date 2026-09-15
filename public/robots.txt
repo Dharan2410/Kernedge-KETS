@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kernedge-kets.vercel.app/sitemap.xml

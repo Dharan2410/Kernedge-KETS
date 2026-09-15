@@ -1,5 +1,6 @@
-import kernedgeLogo from "../assets/kernedge-logo.jpg";
 import { CONTACT } from "../config";
+
+const kernedgeLogo = "/kernedge-logo.jpg";
 
 export default function Footer() {
   return (

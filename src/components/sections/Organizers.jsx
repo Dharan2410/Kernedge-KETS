@@ -1,5 +1,5 @@
 import useReveal from "../../hooks/useReveal";
-import kernedgeLogo from "../../assets/kernedge-logo.jpg";
+import kernedgeLogo from "../../../public/kernedge-logo.jpg";
 import { CONTACT } from "../../config";
 
 const PILLARS = [
