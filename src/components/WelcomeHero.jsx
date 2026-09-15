@@ -5,19 +5,8 @@ const HOLD_MS = 2600;
 const SHRINK_MS = 950;
 const NAV_HEIGHT = 76;
 
-const NAV_LINKS = [
-  { label: "About", href: "#about" },
-  { label: "Vision", href: "#vision" },
-  { label: "Prize", href: "#prize" },
-  { label: "Organizers", href: "#organizers" },
-  { label: "Team", href: "#team" },
-  { label: "Domains", href: "#domains" },
-  { label: "Apply", href: "#apply" },
-];
-
 export default function WelcomeHero() {
   const [phase, setPhase] = useState("intro"); // intro -> shrinking -> nav
-  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -208,39 +197,16 @@ export default function WelcomeHero() {
               KETS<span className="text-gold">'26</span>
             </span>
           </a>
-        </div>
 
-        {/* mobile menu panel */}
-        {isNav && (
-          <div
-            className="lg:hidden overflow-hidden transition-all duration-300 ease-out"
-            style={{
-              maxHeight: menuOpen ? 420 : 0,
-              background: "#0a0a0a",
-              borderTop: menuOpen ? "1px solid rgba(255,255,255,0.08)" : "none",
-            }}
+          {/* Register is the only nav item, so it's shown directly on every
+              screen size — no hamburger/collapsible menu needed. */}
+          <a
+            href="#apply"
+            className="px-4 py-2 rounded-full bg-gold text-ink text-sm font-semibold hover:bg-gold-pale transition-colors shrink-0"
           >
-            <nav className="flex flex-col px-6 py-4 gap-4">
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="text-paper/80 hover:text-gold text-base"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </a>
-              ))}
-              <a
-                href="#apply"
-                className="mt-1 px-4 py-2 rounded-full bg-gold text-ink text-sm font-semibold text-center"
-                onClick={() => setMenuOpen(false)}
-              >
-                Register
-              </a>
-            </nav>
-          </div>
-        )}
+            Register
+          </a>
+        </div>
       </div>
 
       {/* spacer so content clears the fixed navbar once collapsed */}
