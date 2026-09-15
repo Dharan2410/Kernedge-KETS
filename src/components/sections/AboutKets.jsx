@@ -2,8 +2,8 @@ import useReveal from "../../hooks/useReveal";
 
 const OPPORTUNITIES = [
   "Explore emerging technologies and future career domains",
-  "Work on real-world problem statements",
-  "Develop practical and industry-relevant skills",
+  "Work on real world problem statements",
+  "Develop practical and industry relevant skills",
   "Collaborate with students from different engineering disciplines",
   "Interact with industry professionals and technology experts",
   "Transform ideas into working solutions",
@@ -27,15 +27,15 @@ export default function AboutKets() {
               What is KETS?
             </h2>
             <p className="mt-6 text-paper/75 text-base md:text-lg leading-relaxed max-w-2xl">
-              KETS — the <span className="text-paper font-medium">KernEdge Technology &amp; Engineering Summit</span> — is
-              an industry-driven platform that brings students, innovators, educators, and technology enthusiasts
-              together to explore emerging technologies, solve real-world problems, and build practical solutions.
+              KETS the <span className="text-paper font-medium">KernEdge Technology &amp; Engineering Summit</span> is
+              an industry driven platform that brings students, innovators, educators, and technology enthusiasts
+              together to explore emerging technologies, solve real world problems, and build practical solutions.
             </p>
             <p className="mt-4 text-paper/75 text-base md:text-lg leading-relaxed max-w-2xl">
-              KETS focuses on learning beyond the classroom — connecting academic knowledge with industry
+              KETS focuses on learning beyond the classroom connecting academic knowledge with industry
               requirements through technology challenges, workshops, hackathons, expert interactions, and
-              hands-on experiences. It is built as a full hackathon experience: teams pick a real problem
-              statement, work in three staged phases from proposal to prototype to final demo, and get their
+              handson experiences. It is built as a full hackathon experience.Each team pick a real problem
+              statement, work in three staged phases from proposal to prototype to final demo and get their
               solutions reviewed by people who build technology for a living, not just grade assignments for one.
             </p>
           </div>
@@ -49,7 +49,7 @@ export default function AboutKets() {
               The gap between what students learn and what industry expects is growing fast.
             </p>
             <p className="mt-3 text-paper/65 text-sm md:text-base leading-relaxed">
-              KETS was built to close that gap — putting real problems, real mentors, and a real deadline in
+              KETS was built to close that gap putting real problems, real mentors, and a real deadline in
               front of students before they graduate into needing them.
             </p>
           </div>

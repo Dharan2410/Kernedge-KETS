@@ -77,8 +77,7 @@ export default function ProblemStatements({ onApplyDomain }) {
             Problem domains
           </h2>
           <p className="mt-5 text-paper/65 text-base md:text-lg max-w-2xl">
-            Twelve tracks drawn straight from the KETS '26 brief. Open a domain to see every problem statement
-            inside it, then apply against the one your team wants to solve.
+            Thirteen tracks inspired by KETS ’26, plus an open track for your own idea. Explore each domain to discover the problem statements.
           </p>
         </div>
       </div>

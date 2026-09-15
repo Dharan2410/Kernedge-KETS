@@ -1,13 +1,19 @@
-// Replace these with the real KETS '26 team. `image` can be an
-// imported photo (import Name from "../assets/team/name.jpg") — leave
-// it null to fall back to an initials card.
+import Dharan from "../assets/Dharan.jpg";
+import saravanan from "../assets/saravanan.jpg";
+import hari from "../assets/hari.jpg";
+import Charu from "../assets/Charulatha.jpg";
+import sathya from "../assets/sathya.jpg";
+import siva from "../assets/siva.jpg";
+import sam from "../assets/sam.jpg";
+
 const PEOPLE = [
-  { name: "Full Name", role: "Faculty Coordinator", image: null },
-  { name: "Full Name", role: "Event Director", image: null },
-  { name: "Full Name", role: "Technical Lead", image: null },
-  { name: "Full Name", role: "Design Lead", image: null },
-  { name: "Full Name", role: "Operations Lead", image: null },
-  { name: "Full Name", role: "Outreach Lead", image: null },
+  { name: "Saravanan N", role: "Founder & Director", image: saravanan },
+  { name: "Hariprasad R", role: "Co-Founder & Director", image: hari },
+  { name: "Dharan G", role: "General Manager", image: Dharan },
+  { name: "charulatha M", role: "AI & Emerging Technologies Lead", image: Charu },
+  { name: "Sathya K", role: "Technical Lead", image: sathya },
+  { name: "Siva Riddiq T", role: "Operational Head", image: siva },
+  { name: "SaumyaSri R P", role: "Technical Associate", image: sam },
 ];
 
 export default PEOPLE;

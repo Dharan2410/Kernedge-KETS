@@ -1,14 +1,14 @@
 import useScrollProgress from "../../hooks/useScrollProgress";
 import useReveal from "../../hooks/useReveal";
 
-// ─── Content ─────────────────────────────────────────────────────────────────
+// ─── Content 
 
 const STEPS = [
   {
     number: "01",
     phase: "Ideation & Submission",
     title: "Register Your Idea",
-    desc: "Submit your team's concept and a proposed solution to a real-world problem statement. Our review panel evaluates every entry and shortlists teams with the strongest, most innovative approaches. Shortlisted teams are notified directly with next-step details.",
+    desc: "Submit your team's concept and a proposed solution to a real world problem statement. Our review panel evaluates every entry and shortlists teams with the strongest, most innovative approaches. Shortlisted teams are notified directly with next step details.",
     tags: ["Team registration", "Problem domain selection", "Solution submission", "Shortlist announcement"],
     grand: false,
   },
@@ -23,25 +23,24 @@ const STEPS = [
   {
     number: "03",
     phase: "Progress Review",
-    title: "Mid‑Phase Check‑In",
-    desc: "Halfway through the build, the jury reviews your prototype in progress. Show what's working, what's changed from your original proposal, and where you're headed. A guided checkpoint — not a pass-fail — designed to help you reach the final in the strongest shape.",
-    tags: ["Prototype walkthrough", "Jury & mentor feedback", "Course-correction window", "Real-time guidance"],
+    title: "MidPhase CheckIn",
+    desc: "Halfway through the build, the jury reviews your prototype in progress. Show what's working, what's changed from your original proposal, and where you're headed. A guided checkpoint not a pass fail designed to help you reach the final in the strongest shape.",
+    tags: ["Prototype walkthrough", "Jury & mentor feedback", "Course correction window", "Real time guidance"],
     grand: false,
   },
   {
     number: "04",
     phase: "Grand Finale",
-    title: "Final Demo & Awards",
-    desc: "Your completed project takes center stage. Present a fully working solution to the grand jury. Winning teams receive a ₹1,00,000 cash prize and a 3-month paid internship at KernEdge — turning their solution into something real.",
-    tags: ["Full working demo", "Grand jury evaluation", "₹1,00,000 cash prize", "3-month KernEdge internship"],
+    title: "Final Presentation & Awards",
+    desc: "Your completed project takes center stage. Present a fully working solution to the grand jury. Winning teams receive a total ₹1,00,000 cash prize and a 3 month paid internship at KernEdge turning their solution into something real.",
+    tags: ["Full working demo", "Grand jury evaluation", "₹1,00,000 cash prize", "3 month KernEdge internship"],
     grand: true,
   },
 ];
 
-// Node x-positions as percentage of the full-width track
 const NODE_X = [12.5, 37.5, 62.5, 87.5];
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// Component 
 
 export default function ProcessSection() {
   const { ref, progress } = useScrollProgress();
@@ -49,8 +48,8 @@ export default function ProcessSection() {
 
   const linePercent = Math.min(progress * 100, 100);
 
-  // Step 0 = progress 0–0.25, Step 1 = 0.25–0.5, …
-  const activeStep = Math.min(Math.floor(progress * 4), 3);
+  const nodeProgressFracs = NODE_X.map(x => x / 100); // [0.125, 0.375, 0.625, 0.875]
+  const activeStep = nodeProgressFracs.reduce((acc, frac, i) => { return linePercent / 100 >= frac ? i : acc;}, -1);
 
   return (
     <section
@@ -90,7 +89,7 @@ export default function ProcessSection() {
             }}
           />
 
-          {/* Animated gold fill — the star of the show */}
+          {/* Animated gold fill the star of the show */}
           <div
             className="absolute left-0"
             style={{
@@ -165,7 +164,7 @@ export default function ProcessSection() {
                   {step.number}
                 </p>
 
-                {/* Phase name — hidden on small screens to prevent overlap */}
+                {/* Phase name hidden on small screens to prevent overlap */}
                 <p
                   className="hidden md:block text-xs mt-0.5 whitespace-nowrap"
                   style={{
@@ -278,40 +277,13 @@ export default function ProcessSection() {
                       </span>
                     ))}
                   </div>
-
-                  {/* Progress pills + counter */}
-                  <div className="flex items-center gap-2 mt-10">
-                    {STEPS.map((_, j) => (
-                      <div
-                        key={j}
-                        className="rounded-full"
-                        style={{
-                          width: activeStep === j ? 28 : 6,
-                          height: 6,
-                          background:
-                            activeStep === j
-                              ? "#F2B705"
-                              : j < activeStep
-                              ? "rgba(242,183,5,0.35)"
-                              : "rgba(247,246,242,0.15)",
-                          transition: "width 0.4s ease, background 0.4s ease",
-                        }}
-                      />
-                    ))}
-                    <span
-                      className="font-mono-tag text-xs ml-2"
-                      style={{ color: "rgba(247,246,242,0.35)" }}
-                    >
-                      {activeStep + 1}&thinsp;/&thinsp;{STEPS.length}
-                    </span>
-                  </div>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* ── Scroll hint — visible only on first step ──────────────────── */}
+        {/* ── Scroll hint visible only on first step ──────────────────── */}
         <div
           className="pb-8 flex justify-center"
           style={{
@@ -359,7 +331,6 @@ export default function ProcessSection() {
             </svg>
           </div>
         </div>
-
       </div>
     </section>
   );

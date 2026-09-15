@@ -36,10 +36,6 @@ function ProblemRow({ problem, index, isOpen, onToggle }) {
 export default function DomainModal({ domain, onClose, onApply }) {
   const [openIndex, setOpenIndex] = useState(null);
 
-  // Guarded on `domain` so this never runs (and never locks page scroll)
-  // while the modal isn't actually open. The parent also remounts this
-  // component with a fresh `key` per domain, so `openIndex` naturally
-  // starts at null each time — no separate reset effect needed.
   useEffect(() => {
     if (!domain) return;
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -76,9 +72,9 @@ export default function DomainModal({ domain, onClose, onApply }) {
           {domain.title}
         </h3>
         <p className="text-paper/60 mt-2 text-sm md:text-base">{domain.blurb}</p>
-        <p className="text-paper/35 text-xs mt-4 uppercase tracking-[0.2em] font-mono-tag">
+        {/* <p className="text-paper/35 text-xs mt-4 uppercase tracking-[0.2em] font-mono-tag">
           Click a problem to read the full brief
-        </p>
+        </p> */}
 
         <ul className="mt-4">
           {domain.problems.map((problem, i) => (

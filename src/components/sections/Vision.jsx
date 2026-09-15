@@ -42,7 +42,7 @@ export default function Vision() {
         <div ref={visionBlockRef} className={`reveal reveal-delay-1 ${visionBlockVisible ? "is-visible" : ""} brackets inline-block p-8 md:p-10 text-gold-deep`}>
           <p className="font-mono-tag text-xs tracking-[0.25em] text-ink/45 mb-4">OUR VISION</p>
           <p className="font-display font-semibold text-ink leading-snug" style={{ fontSize: "clamp(1.3rem, 3vw, 2rem)" }}>
-            To create a generation of engineers who don't just learn technology — but build with it.
+            To create a generation of engineers who don't just learn technology but build with it.
           </p>
         </div>
       </div>

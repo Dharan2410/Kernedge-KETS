@@ -1,10 +1,4 @@
-// ---------------------------------------------------------------------------
-// Paste the deployed Google Apps Script Web App URL here (see
-// /google-apps-script/Code.gs + README.md for setup). Until this is set,
-// the application form will show a clear "not connected yet" message
-// instead of failing silently.
-// ---------------------------------------------------------------------------
-export const GOOGLE_SCRIPT_URL = "";
+export const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLTOWJ6ZMMbesy6w7EdFlIYOn0Y4BuzN4yaAQY4O-Ahmvu9WqPI8tjxlNlJE85e_14Sw/exec";
 
 export const CONTACT = {
   email: "kernedge.pvt.ltd@gmail.com",

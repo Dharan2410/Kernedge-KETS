@@ -97,7 +97,7 @@ export default function PrizeSection() {
           </h2>
           <p className="mt-5 text-paper/70 text-base md:text-lg leading-relaxed max-w-md mx-auto lg:mx-0">
             KETS '26 puts a ₹{PRIZE_AMOUNT} cash prize pool behind the teams who take a real problem statement
-            furthest — from a rough proposal to a working prototype that a jury of industry mentors can actually
+            furthest from a rough proposal to a working prototype that a jury of industry mentors can actually
             put through its paces.
           </p>
 
@@ -145,10 +145,6 @@ export default function PrizeSection() {
                   animation: settled ? "coin-breathe 6s ease-in-out infinite" : "none",
                 }}
               >
-                {/* shine sweep — a background gradient sized well beyond the box,
-                    animated via background-position so the diagonal band is
-                    guaranteed to cross every corner (a same-size rotated div
-                    would only sweep the middle, missing the corners). */}
                 <div className="absolute inset-0 rounded-[40px] overflow-hidden pointer-events-none">
                   <div
                     className="absolute inset-0"

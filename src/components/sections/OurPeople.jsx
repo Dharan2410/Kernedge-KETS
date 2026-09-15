@@ -37,13 +37,18 @@ function PersonCard({ person, style, big }) {
       }}
     >
       <div
-        className="w-full aspect-square rounded-xl overflow-hidden flex items-center justify-center"
+        className="w-[82%] md:w-[76%] aspect-[4/4.6] rounded-xl overflow-hidden flex items-center justify-center mx-auto"
         style={{
           background: person.image ? "transparent" : "linear-gradient(135deg, #F2B70522, #F2B70508)",
         }}
       >
         {person.image ? (
-          <img src={person.image} alt={person.name} className="w-full h-full object-cover" />
+          <img
+            src={person.image}
+            alt={person.name}
+            className="w-full h-full object-cover object-center"
+            style={{ objectPosition: "center 25%" }}
+          />
         ) : (
           <span className="font-display text-2xl md:text-3xl font-bold text-gold">
             {initials(person.name)}
@@ -120,7 +125,10 @@ export default function OurPeople() {
           </h2>
         </div>
 
-        <div className="relative w-full h-full max-w-6xl mx-auto">
+        <div
+          className="relative w-full h-full max-w-6xl mx-auto"
+          style={{ opacity: ht, transition: "opacity 60ms linear" }}
+        >
           {PEOPLE.map((person, i) => {
             const pStart = i * personWindow;
             const localP = Math.min(Math.max((stageProgress - pStart) / personWindow, 0), 1);
@@ -136,7 +144,11 @@ export default function OurPeople() {
               rotate = v.rotate;
               offsetX = v.offsetX;
               offsetY = v.offsetY;
-              z = 10 + i;
+              // Whoever animates soonest (smallest i, among those still
+              // waiting) sits on TOP of the right-hand pile, so cards peel
+              // off the front of the stack in order instead of emerging
+              // from underneath everyone still behind them.
+              z = 10 + (n - i);
             } else if (isAfter) {
               const v = stackVisual(i, "left");
               x = REST_X;

@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
 import kernedgeLogo from "../assets/kernedge-logo.jpg";
 
-/**
- * KETS '26 — Welcome intro.
- * A full-viewport, deliberately vibrant title card plays once, then the
- * screen's bottom edge rises to meet the top and it settles into the
- * site's slim black-and-gold navbar. Everything else on the page sits
- * below it in normal flow (a spacer keeps content clear of the fixed bar).
- */
-
 const HOLD_MS = 2600;
 const SHRINK_MS = 950;
 const NAV_HEIGHT = 76;
@@ -196,7 +188,7 @@ export default function WelcomeHero() {
               className="mt-6 max-w-xl text-sm md:text-base"
               style={{ color: "#C9C4D6", animation: "kets-tagIn 0.8s ease 1.1s both" }}
             >
-              Where technology meets talent — a Kernedge &amp; Startup Community Coimbatore initiative.
+              Where technology meets talent a Kernedge &amp; Startup Community Coimbatore initiative.
             </p>
           </div>
         )}
