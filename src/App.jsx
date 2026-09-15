@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import WelcomeHero from "./components/WelcomeHero";
 import AboutKets from "./components/sections/AboutKets";
 import Vision from "./components/sections/Vision";
@@ -25,6 +26,7 @@ export default function App() {
       <ProcessSection />
       <ApplicationForm prefillDomain={prefillDomain} />
       <Footer />
+      <Analytics />
     </>
   );
 }
